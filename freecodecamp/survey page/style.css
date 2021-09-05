@@ -1,0 +1,13 @@
+body,form{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+label{
+	margin: 10px 0;
+}
+#submit{
+	margin: 5px;
+}

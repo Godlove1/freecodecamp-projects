@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>technical documentation</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+	<main id="main-doc">
+	<nav id="nav-bar">
+		<header>How MDN’s autocomplete search works</header>
+		<a href="#implementation_details" class="nav-link">Implementation details</a>
+		<a href="#details" class="nav-link">dig deeper into the implementation details</a>
+		<a href="#Deciding_which_result_to_show_first" class="nav-link">Deciding which result to show first</a>
+		<a href="#How_to_search_by_URL" class="nav-link">The easter egg: How to search by URL
+		</a>
+		<a href="#deep_implementation_details" class="nav-link">get really deep into the implementation details</a>
+	</nav>
+	
+	<div class="div">
+		<section class="main-section" id="implementation_details">
+			<header>Implementation details</header>
+			<p>By default, the only JavaScript code that’s loaded is a small shim that watches for <code>onmouseover</code> and onfocus for the
+			search input field. <li>there’s </li>also an event listener on the whole document that looks for a certain keystroke Pressing
+			/ at any point, acts the same as if you had used your mouse cursor to put focus into the input field.</p> As soon as focus
+			is triggered, the first thing it does is download two JavaScript <code>bundles</code> which turns the input field into something
+			much more advanced.In its simplest (pseudo) form, here’s how it works:</p>
+			<a href="https://developer.mozilla.org/en-US/search-index.json">https://developer.mozilla.org/en-US/search-index.json.</a>
+		</section>
+
+
+		<section class="main-section" id="details">
+			<header>details</header>
+<p>We create the FlexSearch index just once and re-use it for every new keystroke. Because the user might type more while
+waiting for the network,<li>it’s actually reactive so executes the actual search once all the JavaScript and the</li> <code>JSON XHR</code>
+have arrived.</p>
+<p>
+Before we dig into what this FlexSearch is, let’s talk about how the display actually works.</p>
+ <p>For that we use a React
+library called downshift which handles all the interactions, displays, and makes sure the displayed search results are
+accessible.</p> <p>downshift is a mature library that handles a myriad of challenges with building a widget like that,
+especially the aspects of making it accessible.</p>
+<p>
+So, what is this <code>FlexSearch</code>
+library? <li>It’s another third party that makes sure that searching on titles is done with</li>
+natural language in mind. It describes itself as the “Web’s fastest and most memory-flexible full-text search library
+with zero dependencies.”</p><p> which is a lot more performant and accurate than attempting to simply look for one string in a
+long list of other strings.</p>
+<a href="https://www.peterbe.com/">author of this work</a>
+</section>
+
+
+		<section class="main-section" id="Deciding_which_result_to_show_first">
+<header>Deciding which result to show first</header>
+<p>n fairness, if the user types foreac, it’s not that hard to reduce a list of 10,000+ document titles down to only those
+that contain foreac in the title, then we decide which result to show first. The way we implement that is relying on
+pageview stats.</p>
+<p> We record, for every single MDN URL, which one gets the most pageviews as a form of determining
+“popularity”. The documents that most people decide to arrive on are most probably what the user was searching for.
+</p><p>
+Our build-process that generates the <code>search-index.json</code> file knows about each URLs number of pageviews. We actually don’t
+care about absolute numbers, but what we do care about is the relative differences. For example,</p>
+<p> we know that
+Array.prototype.forEach() (that’s one of the document titles) is a more popular page than
+TypedArray.prototype.forEach(), so we leverage that and sort the entries in search-index.json accordingly.</p>
+<p> Now, with
+FlexSearch doing the reduction, we use the “natural order” of the array as the trick that tries to give users the
+document they were probably looking for. </p><p>It’s actually the same technique we use for Elasticsearch in our full
+site-search. 
+<li>More about that in:</li><a href="https://hacks.mozilla.org/2021/03/how-mdns-site-search-works/">How MDN’s site-search works.</a></p>
+</section>
+
+
+		<section class="main-section" id="How_to_search_by_URL">
+<header>How to search by URL</header>
+<p>ctually, it’s not a whimsical easter egg, but a feature that came from the fact that this autocomplete needs to work for
+our content creators. You see, when you work on the <a href="https://github.com/mdn/content">content in MDN</a> you start a local “preview server” which is a
+complete copy of all documents but all running locally, as a static site, under http://localhost:5000. There, you don’t
+want to rely on a server to do searches. Content authors need to quickly move between documents, so much of the reason
+why the autocomplete search is done entirely in the client is because of that.
+
+Commonly implemented in tools like the <code>VSCode</code> and Atom IDEs, you can do “fuzzy searches” to find and open files simply
+by typing portions of the file path. For example, searching for whmlemvo should find the file
+files/web/html/element/video. 
+<li>You can do that with MDN’s autocomplete search too. The way you do it is by typing / as
+the first input character</li>.</p>
+</section>
+
+
+		<section class="main-section" id="deep_implementation_details">
+<header>deep implementation details</header>
+<p>The code for all of this is in the Yari repo which is the project that builds and previews all of the MDN content. To
+find the exact code, click into the client/src/search.tsx source code and you’ll find all the code for lazy-loading,
+searching, preloading, and displaying autocomplete searches.</p>
+<a href="https://hacks.mozilla.org/2021/08/mdns-autocomplete-search/">Read more here</a>
+</section>
+	</div>
+	</main>
+</body>
+</html>

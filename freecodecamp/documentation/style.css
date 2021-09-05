@@ -1,0 +1,46 @@
+body{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+nav{
+	background: teal;
+	color: white;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 20px;
+}
+header{
+	font-size: 2em;
+	border-bottom: 1px solid black;
+	text-transform: capitalize;
+}
+nav a{
+	text-decoration: none;
+	color: white;
+	border: 1px solid black;
+	padding: 5px;
+	margin: 10px 0;
+}
+.main-section{
+	text-align: center;
+	margin: 20px 0;
+}
+main{
+	max-width: 1000px;
+}
+
+@media(max-width:1500px){
+	main{
+		display: flex;
+	}
+	nav{
+		display: flex;
+	flex-direction: column;
+	align-items: unset;
+	justify-content: unset;
+	width: 50%;
+	}
+}

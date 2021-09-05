@@ -1,0 +1,39 @@
+header img{
+	height: 45px;
+}
+header{
+	display: grid;
+	place-items: center;
+}
+nav{
+	margin: 20px 0;
+	position: fixed;
+	top: 50px;
+}
+a{
+	text-decoration: none;
+	color: teal;
+	font-size: 1.3em;
+	border: 1px solid black;
+	padding: 10px ;
+}
+video{
+	width: 60%;
+	height: 100%;
+	border: 1px solid  black;
+	margin: 70px 0 20px 0 ;
+	display: grid;
+	place-items: center;
+}
+form{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+#email{
+	margin: 10px 0;
+}
+@media(min-width:800px){
+
+}
